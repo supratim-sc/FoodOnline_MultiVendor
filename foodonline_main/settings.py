@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = []
 
@@ -77,8 +77,13 @@ WSGI_APPLICATION = 'foodonline_main.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config('NAME_DB'),
+        'USER' : config('USER_DB'),
+        'PASSWORD': config('PASSWORD_DB', cast=int),
+        'HOST' : config('HOST_DB', default='localhost'),
+        'PORT' : config('PORT_DB', default=5432, cast=int)
+
     }
 }
 
