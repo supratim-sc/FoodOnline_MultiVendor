@@ -132,6 +132,10 @@ STATICFILES_DIRS = [
     'foodonline_main/static',
 ]
 
+# Media files configuration
+MEDIA_URL = 'medaia/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
