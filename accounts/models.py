@@ -127,3 +127,21 @@ class User(AbstractBaseUser):
         '''
         return True
 
+class UserProfile(models.Model):
+    # As we want only one UserProfile to be associated with an individual User, hence used OneToOneField
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    prifile_picture = models.ImageField(upload_to='user/profile_pictures', null=True, blank=True)
+    cover_photo = models.ImageField(upload_to='user/cover_photos', null=True, blank=True)
+    address_line_1 = models.CharField(max_length=50, null=True, blank=True)
+    address_line_2 = models.CharField(max_length=50, null=True, blank=True)
+    city = models.CharField(max_length=15, null=True, blank=True)
+    State = models.CharField(max_length=15, null=True, blank=True)
+    country = models.CharField(max_length=15, null=True, blank=True)
+    pin_code = models.CharField(max_length=6, null=True, blank=True)
+    latitude = models.CharField(max_length=20, null=True, blank=True)
+    longitude = models.CharField(max_length=20, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.user.email
