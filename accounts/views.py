@@ -19,6 +19,11 @@ def user_registration(request):
             # assigning the role as Customer to the user 
             user.role = User.CUSTOMER
 
+            # ----- WAY-1 HASING THE PASSWORD USING THE set_password() -----
+            # getting the password from the form
+            password = form.cleaned_data['password']
+            user.set_password(password)
+
             # saving the user with all previous data from the form and the newly assigned role
             user.save()
 
