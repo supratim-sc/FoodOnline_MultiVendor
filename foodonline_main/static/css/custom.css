@@ -1,0 +1,23 @@
+/* MESSAGES ALERT STYLING */
+
+.show-notification{
+    position: fixed;
+    bottom: 100%;
+    right: 20px;
+    animation: messages-alert-animation 5s ease-in-out;
+}
+
+@keyframes messages-alert-animation {
+    0% {
+        bottom: -100%;
+    }
+    20% {
+        bottom: 100px;
+    }
+    80% {
+        bottom: 100px;
+    }
+    100% {
+        bottom: -100%;
+    }
+}
