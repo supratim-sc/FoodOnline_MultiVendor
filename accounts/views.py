@@ -47,9 +47,11 @@ def user_registration(request):
 
             # after saving the user redirecting the user back to the registration form
             return redirect('user_registration')
-        
+
+            
     # if the user visits the page i.e., GET request the showing the blank form
-    form = UserRegistrationForm()
+    else:   # we implemented this else if have form.errors, otherwise the form will be rendered over the errors and we can't see the errors in the template
+        form = UserRegistrationForm()
 
     # sending the form as context dictionary to the HTML Template
     context = {
