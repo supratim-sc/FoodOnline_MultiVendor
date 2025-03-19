@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib import messages
 
 from .forms import UserRegistrationForm
 from .models import User
@@ -44,6 +45,9 @@ def user_registration(request):
 
             # saving the user with all previous data from the form and the newly assigned role
             user.save()
+
+            # showing success message using Django Messages 
+            messages.success(request, 'Account has been created successfully!!')
 
             # after saving the user redirecting the user back to the registration form
             return redirect('user_registration')
