@@ -6,8 +6,15 @@ from .models import User, UserProfile
 
 # Create your views here.
 def user_registration(request):
+    # if the user is already logged in
+    if request.user.is_authenticated:
+        # Showing message
+        messages.warning(request, 'You already have an account!!')
+        # redirecting to the dashboard page
+        return redirect('dashboard')
+    
     # if the user submits the form then
-    if request.method == "POST":
+    elif request.method == "POST":
         # taking all data submitted by the user
         form = UserRegistrationForm(request.POST)
         # checking if all data is valid or not
@@ -66,7 +73,14 @@ def user_registration(request):
 
 
 def vendor_registration(request):
-    if request.method == 'POST':
+    # if the user is already logged in
+    if request.user.is_authenticated:
+        # Showing message
+        messages.warning(request, 'You already have an account!!')
+        # redirecting to the dashboard page
+        return redirect('dashboard')
+    
+    elif request.method == 'POST':
         user_form = UserRegistrationForm(request.POST)
         vendor_form = VendorRegistrationForm(request.POST, request.FILES)
 
@@ -124,7 +138,14 @@ def vendor_registration(request):
 
 
 def login(request):
-    if request.method == "POST":
+    # if the user is already logged in
+    if request.user.is_authenticated:
+        # Showing message
+        messages.warning(request, 'You are already logged in!!')
+        # redirecting to the dashboard page
+        return redirect('dashboard')
+    
+    elif request.method == "POST":
         email = request.POST['email']
         password = request.POST['password']
 
