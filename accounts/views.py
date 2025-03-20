@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib import messages
+from django.contrib import messages, auth
 
 from .forms import UserRegistrationForm, VendorRegistrationForm
 from .models import User, UserProfile
@@ -121,3 +121,48 @@ def vendor_registration(request):
     }
 
     return render(request, 'accounts/vendor_registration.html', context)
+
+
+def login(request):
+    if request.method == "POST":
+        email = request.POST['email']
+        password = request.POST['password']
+
+        # checking if user exists with the provided email and password
+        user = auth.authenticate(email=email, password=password)
+
+        # if any user found with the provided credentials
+        if user:
+            # logging in the user
+            auth.login(request, user)
+
+            # showing success message
+            messages.success(request, 'You have logged in successfully!!')
+
+            # redirecting the user to the dashboard page
+            return redirect('dashboard')
+        
+        # if not correct credentials
+        else:
+            # showing error mesage
+            messages.error(request, 'Invalid credentials!! Enter correct credentials!!')
+
+            # redirecting the user again to the login page
+            return redirect('login')
+        
+    return render(request, 'accounts/login.html')
+
+
+def logout(request):
+    # loging out the user
+    auth.logout(request)
+    
+    # showing message
+    messages.info(request, 'You have logged out successfully!!')
+
+    # redirecting the user to login page
+    return redirect('login')
+
+
+def dashboard(request):
+    return render(request, 'accounts/dashboard.html')
