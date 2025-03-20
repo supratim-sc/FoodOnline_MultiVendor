@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 
-from .forms import UserRegistrationForm
-from .models import User
+from .forms import UserRegistrationForm, VendorRegistrationForm
+from .models import User, UserProfile
 
 # Create your views here.
 def user_registration(request):
@@ -63,3 +63,61 @@ def user_registration(request):
     }
 
     return render(request, 'accounts/user_registration.html', context)
+
+
+def vendor_registration(request):
+    if request.method == 'POST':
+        user_form = UserRegistrationForm(request.POST)
+        vendor_form = VendorRegistrationForm(request.POST, request.FILES)
+
+        if user_form.is_valid() and vendor_form.is_valid():
+            # getting the data after cleaning form the form
+            first_name = user_form.cleaned_data['first_name']
+            last_name = user_form.cleaned_data['last_name']
+            username = user_form.cleaned_data['username']
+            email = user_form.cleaned_data['email']
+            password = user_form.cleaned_data['password']
+
+            # setting the user from the data from the form
+            user = User.objects.create_user(first_name=first_name, last_name=last_name, username=username, email=email, password=password)
+
+            # setting the role
+            user.role = User.VENDOR
+
+            # saving the user with all previous data from the form and the newly assigned role
+            user.save()
+
+            # Saving the Vendor
+            # here, commit=False as we want to add user and user_profile which is not present in the vendor_form, 
+            # as vendor_form only has two fields, vendor_name and vendor_license
+            vendor = vendor_form.save(commit=False) 
+
+            # setting the user to the vendor
+            vendor.user = user
+
+            # fetching the UserProfile using the user
+            user_profile = UserProfile.objects.get(user=user)
+
+            # setting the user_profile
+            vendor.user_profile = user_profile
+
+            # saving the vendor 
+            vendor.save()
+
+            # showing success message using Django Messages 
+            messages.success(request, 'Account has been created successfully!!')
+
+            # after saving the user redirecting the user back to the registration form
+            return redirect('vendor_registration')
+    
+    # if GET request then show the foorm
+    else:
+        user_form = UserRegistrationForm()
+        vendor_form = VendorRegistrationForm()
+
+    context = {
+        'user_form' : user_form,
+        'vendor_form' : vendor_form,
+    }
+
+    return render(request, 'accounts/vendor_registration.html', context)

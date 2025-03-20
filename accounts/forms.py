@@ -1,5 +1,7 @@
 from django import forms
+
 from .models import User
+from vendors.models import Vendor
 
 class UserRegistrationForm(forms.ModelForm):
     # making the password field of type password
@@ -31,3 +33,7 @@ class UserRegistrationForm(forms.ModelForm):
             raise forms.ValidationError("Passwords does not match!!")
 
 
+class VendorRegistrationForm(forms.ModelForm):
+    class Meta:
+        model = Vendor
+        fields = ['vendor_name', 'vendor_license']
