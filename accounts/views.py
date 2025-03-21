@@ -27,8 +27,9 @@ def user_registration(request):
     if request.user.is_authenticated:
         # Showing message
         messages.warning(request, 'You already have an account!!')
-        # redirecting to the dashboard page
-        return redirect('dashboard')
+
+        # redirecting to the my_account page
+        return redirect('my_account')
     
     # if the user submits the form then
     elif request.method == "POST":
@@ -94,8 +95,9 @@ def vendor_registration(request):
     if request.user.is_authenticated:
         # Showing message
         messages.warning(request, 'You already have an account!!')
-        # redirecting to the dashboard page
-        return redirect('dashboard')
+
+        # redirecting to the my_account page
+        return redirect('my_account')
     
     elif request.method == 'POST':
         user_form = UserRegistrationForm(request.POST)
@@ -159,8 +161,8 @@ def login(request):
     if request.user.is_authenticated:
         # Showing message
         messages.warning(request, 'You are already logged in!!')
-        # redirecting to the dashboard page
-        return redirect('dashboard')
+        # redirecting to the my_account page
+        return redirect('my_account')
     
     elif request.method == "POST":
         email = request.POST['email']
@@ -177,7 +179,7 @@ def login(request):
             # showing success message
             messages.success(request, 'You have logged in successfully!!')
 
-            # redirecting the user to the dashboard page
+            # redirecting the user to the my_account page
             return redirect('my_account')
         
         # if not correct credentials
