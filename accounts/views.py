@@ -3,6 +3,7 @@ from django.contrib import messages, auth
 
 from .forms import UserRegistrationForm, VendorRegistrationForm
 from .models import User, UserProfile
+from .utils import get_url_by_user_role
 
 # Create your views here.
 def user_registration(request):
@@ -161,7 +162,7 @@ def login(request):
             messages.success(request, 'You have logged in successfully!!')
 
             # redirecting the user to the dashboard page
-            return redirect('dashboard')
+            return redirect('my_account')
         
         # if not correct credentials
         else:
@@ -185,5 +186,20 @@ def logout(request):
     return redirect('login')
 
 
-def dashboard(request):
-    return render(request, 'accounts/dashboard.html')
+def my_account(request):
+    # getting the user
+    user = request.user
+    
+    # determining the redirecting page by the role of the user
+    redirect_url = get_url_by_user_role(user)
+
+    # redirecting the user
+    return redirect(redirect_url)
+
+
+def customer_dashboard(request):
+    return render(request, 'accounts/customer_dashboard.html')
+
+
+def vendor_dashboard(request):
+    return render(request, 'accounts/vendor_dashboard.html')
