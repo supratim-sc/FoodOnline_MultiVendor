@@ -1,0 +1,7 @@
+{% autoescape off %}
+
+Hi {{ user.first_name }} {{ user.last_name }}
+
+http://{{ current_site }}{% url 'account_activation' user_id_encoded=user_id_encoded token=token %}
+
+{% endautoescape %}

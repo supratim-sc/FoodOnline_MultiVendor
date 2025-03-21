@@ -13,4 +13,7 @@ urlpatterns = [
     path('my_account/', views.my_account, name='my_account'),
     path('customer_dashboard/', views.customer_dashboard, name='customer_dashboard'),
     path('vendor_dashboard/', views.vendor_dashboard, name='vendor_dashboard'),
+
+    path('account_activation/<user_id_encoded>/<token>', views.account_activation, name='account_activation'),
+
 ]

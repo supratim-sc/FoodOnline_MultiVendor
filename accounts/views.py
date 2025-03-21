@@ -5,7 +5,7 @@ from django.core.exceptions import PermissionDenied
 
 from .forms import UserRegistrationForm, VendorRegistrationForm
 from .models import User, UserProfile
-from .utils import get_url_by_user_role
+from .utils import get_url_by_user_role, send_user_activation_mail
 
 
 # Restrict customer to access vendor_dahsboard
@@ -70,6 +70,9 @@ def user_registration(request):
 
             # saving the user with all previous data from the form and the newly assigned role
             user.save()
+
+            # sending User activation email
+            send_user_activation_mail(request, user)
 
             # showing success message using Django Messages 
             messages.success(request, 'Account has been created successfully!!')
@@ -136,6 +139,9 @@ def vendor_registration(request):
 
             # saving the vendor 
             vendor.save()
+
+            # sending Vendor activation email
+            send_user_activation_mail(request, user)
 
             # showing success message using Django Messages 
             messages.success(request, 'Account has been created successfully!!')
@@ -227,3 +233,7 @@ def customer_dashboard(request):
 @user_passes_test(check_role_vendor)
 def vendor_dashboard(request):
     return render(request, 'accounts/vendor_dashboard.html')
+
+
+def account_activation(request, user_id_encoded, token):
+    pass
