@@ -83,7 +83,7 @@ class User(AbstractBaseUser):
     last_name = models.CharField(max_length = 50)
     username = models.CharField(max_length = 50, unique = True)
     email = models.EmailField(max_length = 100, unique = True)
-    phone_number = models.CharField(max_length = 10, unique = True)
+    phone_number = models.CharField(max_length = 10, blank=True)
     role = models.PositiveSmallIntegerField(choices = ROLE_CHOICE, default = CUSTOMER)
 
     date_joined = models.DateTimeField(auto_now_add = True)
