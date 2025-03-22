@@ -4,6 +4,7 @@ from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
+from django.conf import settings
 
 def get_url_by_user_role(user):
     # if vendor then sending to vendor dashboard
@@ -20,6 +21,9 @@ def get_url_by_user_role(user):
     
 
 def send_user_activation_mail(request, user):
+    # importing from_email from settings.py
+    from_email = settings.DEFAULT_FROM_EMAIL
+
     # getting the current site
     current_site = get_current_site(request)
 
@@ -42,7 +46,7 @@ def send_user_activation_mail(request, user):
     to_email = user.email
 
     # Creating EmailMessage object
-    mail = EmailMessage(subject=mail_subject, body=message, to=[to_email])
+    mail = EmailMessage(subject=mail_subject, body=message, from_email=from_email, to=[to_email])
 
     # Sending the email message
     mail.send()
