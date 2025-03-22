@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib import messages, auth
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.exceptions import PermissionDenied
+from django.utils.http import urlsafe_base64_decode
+from django.contrib.auth.tokens import default_token_generator
 
 from .forms import UserRegistrationForm, VendorRegistrationForm
 from .models import User, UserProfile
@@ -236,4 +238,33 @@ def vendor_dashboard(request):
 
 
 def account_activation(request, user_id_encoded, token):
-    pass
+    try:
+        # retriving/decoding the user_id from the encoded user_id
+        user_id = urlsafe_base64_decode(user_id_encoded).decode()
+
+        # getting the user using the user_id
+        user = User.objects.get(pk=user_id)
+
+    # if user not found or token not valid or other errors
+    except (ValueError, TypeError, OverflowError, User.DoesNotExist):
+        # set user to None
+        user = None
+
+    # if user is not None and token is valid
+    if user and default_token_generator.check_token(user, token):
+        # setting the is_active status of the user to True
+        user.is_active = True
+
+        # saving the user
+        user.save()
+
+        # showing the success message
+        messages.success(request, 'Congratulations!! Your account has been activated!!')
+    
+    # if user is None or token is invalid 
+    else:
+        # showing error message
+        messages.error(request, 'Invalid activation link!! Please try again!!')
+
+    # redirecting the user to my_account page, for showing the login page to Customer/Vendor
+    return redirect('my_account')
