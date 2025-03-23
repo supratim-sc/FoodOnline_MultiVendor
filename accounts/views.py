@@ -268,3 +268,8 @@ def account_activation(request, user_id_encoded, token):
 
     # redirecting the user to my_account page, for showing the login page to Customer/Vendor
     return redirect('my_account')
+
+
+
+def forgot_password(request):
+    return render(request, 'accounts/forgot_password.html')

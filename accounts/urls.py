@@ -16,4 +16,7 @@ urlpatterns = [
 
     path('account_activation/<user_id_encoded>/<token>', views.account_activation, name='account_activation'),
 
+    path('forgot_password', views.forgot_password, name='forgot_password'),
+
+
 ]
