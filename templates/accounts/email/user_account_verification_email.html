@@ -2,6 +2,7 @@
 
 Hi {{ user.first_name }} {{ user.last_name }}
 
+Please click on the link below to activate your account
 http://{{ current_site }}{% url 'account_activation' user_id_encoded=user_id_encoded token=token %}
 
 {% endautoescape %}

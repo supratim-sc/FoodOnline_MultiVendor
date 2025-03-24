@@ -50,3 +50,36 @@ def send_user_activation_mail(request, user):
 
     # Sending the email message
     mail.send()
+
+
+
+def send_password_reset_mail(request, user):
+    # importing from_email from settings.py
+    from_email = settings.DEFAULT_FROM_EMAIL
+
+    # getting the current site
+    current_site = get_current_site(request)
+
+    # setting the Email subject
+    mail_subject = f'Reset your {current_site} account password'
+
+    # creating Email message with HTML template and necessary data
+    message = render_to_string(
+            'accounts/email/user_password_reset_email.html',  # rendering HTML template
+            {
+                'user' : user,  # passing the user object
+                'current_site' : current_site,  # passing the current site
+                'user_id_encoded' : urlsafe_base64_encode(force_bytes(user.pk)),    # passing the encoded user_id
+                'token' : default_token_generator.make_token(user)  # generating token based on the user and sending it to the template
+            } 
+            # passing the dictionary to the template
+        )
+
+    # Email of the user
+    to_email = user.email
+
+    # Creating EmailMessage object
+    mail = EmailMessage(subject=mail_subject, body=message, from_email=from_email, to=[to_email])
+
+    # Sending the email message
+    mail.send()

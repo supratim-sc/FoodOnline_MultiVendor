@@ -7,7 +7,7 @@ from django.contrib.auth.tokens import default_token_generator
 
 from .forms import UserRegistrationForm, VendorRegistrationForm
 from .models import User, UserProfile
-from .utils import get_url_by_user_role, send_user_activation_mail
+from .utils import get_url_by_user_role, send_user_activation_mail, send_password_reset_mail
 
 
 # Restrict customer to access vendor_dahsboard
@@ -272,4 +272,34 @@ def account_activation(request, user_id_encoded, token):
 
 
 def forgot_password(request):
+    if request.method == 'POST':
+        # getting the email
+        email = request.POST['email']
+
+        # checking if any user exist with the provided email
+        if User.objects.filter(email=email).exists():
+            # getting the user
+            user = User.objects.get(email__exact=email)
+
+            # sending password reset email
+            send_password_reset_mail(request, user)
+
+            # showing success message
+            messages.success(request, 'Password reset email has been sent to your email!!')
+
+            # redirecting the user to the login page
+            return redirect('login')
+        
+        # if any user with the provided email does not exists
+        else:
+            # showing error message
+            messages.error(request, 'Account does not exist!!')
+
+            # redirecting user to the forgot_password page
+            return redirect('forgot_password')
+
     return render(request, 'accounts/forgot_password.html')
+
+
+def reset_password_validation(request, user_id_encoded, token):
+    return
