@@ -7,7 +7,7 @@ from django.contrib.auth.tokens import default_token_generator
 
 from .forms import UserRegistrationForm, VendorRegistrationForm
 from .models import User, UserProfile
-from .utils import get_url_by_user_role, send_user_activation_mail, send_password_reset_mail
+from .utils import get_url_by_user_role, send_email
 
 
 # Restrict customer to access vendor_dahsboard
@@ -73,8 +73,11 @@ def user_registration(request):
             # saving the user with all previous data from the form and the newly assigned role
             user.save()
 
-            # sending User activation email
-            send_user_activation_mail(request, user)
+            # # sending User activation email
+            # send_user_activation_mail(request, user)
+
+            # sending Vendor activation email using new combined method
+            send_email(request, user, mail_subject='Activate your account', html_template_name='accounts/email/user_account_verification_email.html')
 
             # showing success message using Django Messages 
             messages.success(request, 'Account has been created successfully!!')
@@ -142,8 +145,11 @@ def vendor_registration(request):
             # saving the vendor 
             vendor.save()
 
-            # sending Vendor activation email
-            send_user_activation_mail(request, user)
+            # # sending Vendor activation email
+            # send_user_activation_mail(request, user)
+
+            # sending Vendor activation email using new combined method
+            send_email(request, user, mail_subject='Activate your account', html_template_name='accounts/email/user_account_verification_email.html')
 
             # showing success message using Django Messages 
             messages.success(request, 'Account has been created successfully!!')
@@ -281,8 +287,11 @@ def forgot_password(request):
             # getting the user
             user = User.objects.get(email__exact=email)
 
+            # # sending password reset email
+            # send_password_reset_mail(request, user)
+
             # sending password reset email
-            send_password_reset_mail(request, user)
+            send_email(request, user, mail_subject='Reset your password', html_template_name='accounts/email/user_password_reset_email.html')
 
             # showing success message
             messages.success(request, 'Password reset email has been sent to your email!!')
