@@ -18,6 +18,7 @@ urlpatterns = [
 
     path('forgot_password', views.forgot_password, name='forgot_password'),
     path('reset_password_validation/<user_id_encoded>/<token>', views.reset_password_validation, name='reset_password_validation'),
+    path('reset_password', views.reset_password, name='reset_password'),
 
 
 ]

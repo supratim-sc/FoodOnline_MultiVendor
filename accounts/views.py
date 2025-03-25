@@ -311,4 +311,73 @@ def forgot_password(request):
 
 
 def reset_password_validation(request, user_id_encoded, token):
-    return
+    try:
+        # retriving/decoding the user_id from the encoded user_id
+        user_id = urlsafe_base64_decode(user_id_encoded).decode()
+
+        # getting the user using the user_id
+        user = User.objects.get(pk=user_id)
+
+    # if user not found or token not valid or other errors
+    except (ValueError, TypeError, OverflowError, User.DoesNotExist):
+        # set user to None
+        user = None
+
+    # if user is not None and token is valid
+    if user and default_token_generator.check_token(user, token):
+        # saving the user id to the request.sesion so that we can access it in the reset_password method
+        request.session['user_id'] = user_id
+
+        # showing message
+        messages.info(request, 'Please reset your password!!')
+
+        # redirecting the user to the password reset page
+        return redirect('reset_password')
+    
+    # if user is None or token is invalid 
+    else:
+        # showing error message
+        messages.error(request, 'Password reset link is invalid or expired!!')
+
+    # redirecting the user to my_account page, for showing the login page to Customer/Vendor
+    return redirect('my_account')
+
+
+def reset_password(request):
+    # if user submits the form
+    if request.method == 'POST':
+        password = request.POST['password']
+        confirm_password = request.POST['confirm_password']
+
+        # checking if password and confirm_password are equal or not
+        if password == confirm_password:
+            # retriving the user_id from the request.session which is saved earlier
+            user_id = request.session.get('user_id')
+
+            # getting the use from the user_id
+            user = User.objects.get(pk=user_id)
+
+            # setting the password
+            user.set_password(password)
+
+            # saving hte user
+            user.save()
+            
+            # deleting the user_id from the request.session
+            del request.session['user_id']
+
+            # showing success message
+            messages.success(request, 'Password changed successfully!!')
+
+            # redirecting the user to the login page
+            return redirect('login')
+        
+        # if password and confirm_password does not matches
+        else:
+            # showing error message
+            messages.error(request, 'Password and Confirm Password does not matches!! Try again!!')
+
+            # redirecting the user back to the reset_password page
+            return redirect('reset_password')
+
+    return render(request, 'accounts/reset_password.html')
