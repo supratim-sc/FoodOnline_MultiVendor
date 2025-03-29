@@ -130,7 +130,7 @@ class User(AbstractBaseUser):
 class UserProfile(models.Model):
     # As we want only one UserProfile to be associated with an individual User, hence used OneToOneField
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    prifile_picture = models.ImageField(upload_to='user/profile_pictures', null=True, blank=True)
+    profile_picture = models.ImageField(upload_to='user/profile_pictures', null=True, blank=True)
     cover_photo = models.ImageField(upload_to='user/cover_photos', null=True, blank=True)
     address_line_1 = models.CharField(max_length=50, null=True, blank=True)
     address_line_2 = models.CharField(max_length=50, null=True, blank=True)
