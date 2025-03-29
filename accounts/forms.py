@@ -36,4 +36,4 @@ class UserRegistrationForm(forms.ModelForm):
 class VendorRegistrationForm(forms.ModelForm):
     class Meta:
         model = Vendor
-        fields = ['vendor_name', 'vendor_license']
+        fields = ['name', 'vendor_license']
