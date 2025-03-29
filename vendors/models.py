@@ -6,7 +6,7 @@ from accounts.models import User, UserProfile
 # Create your models here.
 class Vendor(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user')
-    user_profile = models.OneToOneField(UserProfile, on_delete=models.CASCADE, related_name='userprofile')
+    user_profile = models.OneToOneField(UserProfile, on_delete=models.CASCADE, related_name='user_profile')
     name = models.CharField(max_length=50)
     vendor_license = models.ImageField(upload_to='vendor/license')
     is_approved = models.BooleanField(default=False)
