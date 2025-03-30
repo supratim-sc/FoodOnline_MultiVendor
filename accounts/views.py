@@ -9,6 +9,8 @@ from .forms import UserRegistrationForm, VendorRegistrationForm
 from .models import User, UserProfile
 from .utils import get_url_by_user_role, send_email
 
+from vendors.models import Vendor
+
 
 # Restrict customer to access vendor_dahsboard
 def check_role_vendor(user):
@@ -240,7 +242,13 @@ def customer_dashboard(request):
 @login_required(login_url='login')
 @user_passes_test(check_role_vendor)
 def vendor_dashboard(request):
-    return render(request, 'accounts/vendor_dashboard.html')
+    vendor = Vendor.objects.get(user=request.user)
+
+    context = {
+        'vendor' : vendor
+    }
+
+    return render(request, 'accounts/vendor_dashboard.html', context)
 
 
 def account_activation(request, user_id_encoded, token):
