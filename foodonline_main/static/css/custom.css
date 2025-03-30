@@ -5,6 +5,7 @@
     bottom: 100%;
     right: 20px;
     animation: messages-alert-animation 5s ease-in-out;
+    z-index: 2;
 }
 
 @keyframes messages-alert-animation {
