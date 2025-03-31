@@ -5,11 +5,12 @@ from django.core.exceptions import PermissionDenied
 from django.utils.http import urlsafe_base64_decode
 from django.contrib.auth.tokens import default_token_generator
 
-from .forms import UserRegistrationForm, VendorRegistrationForm
+from .forms import UserRegistrationForm
 from .models import User, UserProfile
 from .utils import get_url_by_user_role, send_email
 
 from vendors.models import Vendor
+from vendors.forms import VendorRegistrationForm
 
 
 # Restrict customer to access vendor_dahsboard
