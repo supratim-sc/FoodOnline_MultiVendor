@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import User
+from .models import User, UserProfile
 
 class UserRegistrationForm(forms.ModelForm):
     # making the password field of type password
@@ -30,3 +30,9 @@ class UserRegistrationForm(forms.ModelForm):
         # as confirm password is not a field of User model, hence this errors are known as non-field errors
         if password != confirm_password:
             raise forms.ValidationError("Passwords does not match!!")
+
+
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['profile_picture', 'cover_photo', 'address_line_1', 'address_line_2', 'city', 'state', 'country', 'pin_code', 'latitude', 'longitude']

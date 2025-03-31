@@ -135,7 +135,7 @@ class UserProfile(models.Model):
     address_line_1 = models.CharField(max_length=50, null=True, blank=True)
     address_line_2 = models.CharField(max_length=50, null=True, blank=True)
     city = models.CharField(max_length=15, null=True, blank=True)
-    State = models.CharField(max_length=15, null=True, blank=True)
+    state = models.CharField(max_length=15, null=True, blank=True)
     country = models.CharField(max_length=15, null=True, blank=True)
     pin_code = models.CharField(max_length=6, null=True, blank=True)
     latitude = models.CharField(max_length=20, null=True, blank=True)
